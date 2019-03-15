@@ -6,7 +6,10 @@
 </head>
 
 <body>
-    <input type="range" min="0" max="700" value="550" class="slider" id="myRange">
+    a slider
+    <input type="range" min="0" max="700" value="400" class="slider" id="myARange">
+    b slider
+    <input type="range" min="0" max="700" value="550" class="slider" id="myBRange">
     <div id ="displayAvalue">A: 400</div>
     <div id ="displayBvalue">B: 550</div>
     <canvas id="xy-graph" width="700" height="700"></canvas>
@@ -187,9 +190,16 @@
         Draw(a, b)
 
         var bValue = document.getElementById('displayBvalue')
-        document.getElementById('myRange').oninput = function () {
+        document.getElementById('myBRange').oninput = function () {
             Draw(a, this.value)
+            b = this.value
             bValue.innerHTML = "B: " + this.value
+        }
+        var aValue = document.getElementById('displayAvalue')
+        document.getElementById('myARange').oninput = function () {
+            Draw(this.value, b)
+            a = this.value
+            aValue.innerHTML = "A: " + this.value
         }
     </script>
 </body>
