@@ -1,0 +1,19 @@
+{
+  "name": "cassini-oval-nodes",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Connoropolous/cassini-oval-nodes.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Connoropolous/cassini-oval-nodes/issues"
+  },
+  "homepage": "https://github.com/Connoropolous/cassini-oval-nodes#readme"
+}

@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>ovals</title>
+</head>
+
+<body>
+    <input type="range" min="0" max="700" value="400" class="slider" id="myRange">
+    <canvas id="xy-graph" width="700" height="700"></canvas>
+
+
+    <script type="text/javascript">
+
+        /* Canvas and context objects */
+
+        var Canvas = document.getElementById('xy-graph');
+        var Ctx = null;
+
+        var Width = Canvas.width;
+        var Height = Canvas.height;
+
+
+        /*
+          The origin (0,0) of the canvas is the upper left:
+        
+          (0,0)
+            --------- +X
+           |
+           |
+           |
+           |
+           +Y
+        
+          Positive x coordinates go to the right, and positive y coordinates go down.
+        
+          The origin in mathematics is the "center," and positive y goes *up*.
+        
+          We'll refer to the mathematics coordinate system as the "logical"
+          coordinate system, and the coordinate system for the canvas as the
+          "physical" coordinate system.
+        
+          The functions just below set up a mapping between the two coordinate
+          systems.
+        
+          They're defined as functions, so that one wanted to, they could read
+          ther values from a from instead of having them hard-coded.
+         
+         */
+
+
+        // Returns the right boundary of the logical viewport:
+        function MaxX() {
+            return 700;
+        }
+
+        // Returns the left boundary of the logical viewport:
+        function MinX() {
+            return -700;
+        }
+
+        // Returns the top boundary of the logical viewport:
+        function MaxY() {
+            return MaxX() * Height / Width;
+        }
+
+        // Returns the bottom boundary of the logical viewport:
+        function MinY() {
+            return MinX() * Height / Width;
+        }
+
+        // Returns the physical x-coordinate of a logical x-coordinate:
+        function XC(x) {
+            return (x - MinX()) / (MaxX() - MinX()) * Width;
+        }
+
+        // Returns the physical y-coordinate of a logical y-coordinate:
+        function YC(y) {
+            return Height - (y - MinY()) / (MaxY() - MinY()) * Height;
+        }
+
+
+        /* Rendering functions */
+
+        function root(num, degree) {
+            return Math.pow(num, 1 / degree)
+        }
+
+        function pow(base, power) {
+            return Math.pow(base, power)
+        }
+
+        // the core of the Cassinis Ovals formula
+        function getY(x, a, b) {
+            return root(root(pow(b, 4) + 4 * pow(a, 2) * pow(x, 2), 2) - pow(x, 2) - pow(a, 2), 2)
+        }
+
+        function getFunction(a, b) {
+            return function (x) {
+                return getY(x, a, b)
+            }
+        }
+
+        // Clears the canvas, draws the axes and graphs the function F.
+        function Draw(a, b) {
+            var F = getFunction(a, b);
+            if (Canvas.getContext) {
+                // Set up the canvas:
+                Ctx = Canvas.getContext('2d');
+                Ctx.clearRect(0, 0, Width, Height);
+                // Draw:
+                // DrawAxes();
+                RenderFunction(F, 1);
+                RenderFunction(F, -1);
+            }
+        }
+
+
+        // Returns the distance between ticks on the X axis:
+        function XTickDelta() {
+            return 1;
+        }
+
+        // Returns the distance between ticks on the Y axis:
+        function YTickDelta() {
+            return 1;
+        }
+
+
+        // DrawAxes draws the X ad Y axes, with tick marks.
+        function DrawAxes() {
+            Ctx.save();
+            Ctx.lineWidth = 2;
+            // +Y axis
+            Ctx.beginPath();
+            Ctx.moveTo(XC(0), YC(0));
+            Ctx.lineTo(XC(0), YC(MaxY()));
+            Ctx.stroke();
+
+            // -Y axis
+            Ctx.beginPath();
+            Ctx.moveTo(XC(0), YC(0));
+            Ctx.lineTo(XC(0), YC(MinY()));
+            Ctx.stroke();
+
+            // +X axis
+            Ctx.beginPath();
+            Ctx.moveTo(XC(0), YC(0));
+            Ctx.lineTo(XC(MaxX()), YC(0));
+            Ctx.stroke();
+
+            // -X axis
+            Ctx.beginPath();
+            Ctx.moveTo(XC(0), YC(0));
+            Ctx.lineTo(XC(MinX()), YC(0));
+            Ctx.stroke();
+
+            Ctx.restore();
+        }
+
+
+        // When rendering, XSTEP determines the horizontal distance between points:
+        var XSTEP = (MaxX() - MinX()) / Width;
+
+
+        // RenderFunction(f) renders the input funtion f on the canvas.
+        function RenderFunction(f, sign) {
+            var first = true;
+
+            Ctx.beginPath();
+            for (var x = MinX(); x <= MaxX(); x += XSTEP) {
+                var y = f(x) * sign;
+                if (first) {
+                    Ctx.moveTo(XC(x), YC(y));
+                    first = false;
+                } else {
+                    Ctx.lineTo(XC(x), YC(y));
+                }
+            }
+            Ctx.stroke();
+        }
+
+        var a = 400
+        var b = 400
+        Draw(a, b)
+
+        document.getElementById('myRange').oninput = function () {
+            Draw(a, this.value)
+        }
+    </script>
+</body>
+
+</html>
