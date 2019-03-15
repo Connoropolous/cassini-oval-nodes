@@ -1,5 +1,5 @@
 # cassini-oval-nodes
 
-[Youtube demo of what's there so far](https://www.youtube.com/watch?v=hQfgqMAbYmg)
+[Youtube demo of what's there so far](https://youtu.be/6LWuKsnwk_0)
 
 Just open up index.html in a browser

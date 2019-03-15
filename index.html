@@ -6,7 +6,9 @@
 </head>
 
 <body>
-    <input type="range" min="0" max="700" value="400" class="slider" id="myRange">
+    <input type="range" min="0" max="700" value="550" class="slider" id="myRange">
+    <div id ="displayAvalue">A: 400</div>
+    <div id ="displayBvalue">B: 550</div>
     <canvas id="xy-graph" width="700" height="700"></canvas>
 
 
@@ -160,7 +162,7 @@
 
 
         // When rendering, XSTEP determines the horizontal distance between points:
-        var XSTEP = (MaxX() - MinX()) / Width;
+        var XSTEP = 0.03 // (MaxX() - MinX()) / Width;
 
 
         // RenderFunction(f) renders the input funtion f on the canvas.
@@ -170,7 +172,7 @@
             Ctx.beginPath();
             for (var x = MinX(); x <= MaxX(); x += XSTEP) {
                 var y = f(x) * sign;
-                if (first) {
+                if (first || (y > 0 && y < 2.7) || (y < 0 && y > -2.7)) {
                     Ctx.moveTo(XC(x), YC(y));
                     first = false;
                 } else {
@@ -181,11 +183,13 @@
         }
 
         var a = 400
-        var b = 400
+        var b = 550
         Draw(a, b)
 
+        var bValue = document.getElementById('displayBvalue')
         document.getElementById('myRange').oninput = function () {
             Draw(a, this.value)
+            bValue.innerHTML = "B: " + this.value
         }
     </script>
 </body>
