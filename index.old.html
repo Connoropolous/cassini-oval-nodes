@@ -7,11 +7,11 @@
 
 <body>
     a slider
-    <input type="range" min="0" max="10" value="3" class="slider" id="myARange">
-    K slider
-    <input type="range" min="90" max="200" value="200" class="slider" id="myKRange">
-    <div id ="displayAvalue">A: 3</div>
-    <div id ="displayKvalue">K: 2</div>
+    <input type="range" min="0" max="700" value="400" class="slider" id="myARange">
+    b slider
+    <input type="range" min="0" max="700" value="550" class="slider" id="myBRange">
+    <div id ="displayAvalue">A: 400</div>
+    <div id ="displayBvalue">B: 550</div>
     <canvas id="xy-graph" width="700" height="700"></canvas>
 
 
@@ -56,12 +56,12 @@
 
         // Returns the right boundary of the logical viewport:
         function MaxX() {
-            return 10;
+            return 700;
         }
 
         // Returns the left boundary of the logical viewport:
         function MinX() {
-            return -10;
+            return -700;
         }
 
         // Returns the top boundary of the logical viewport:
@@ -96,13 +96,13 @@
         }
 
         // the core of the Cassinis Ovals formula
-        function getYfromK(x, a, K) {
-            return root(root(pow(a, 4) * pow(K, 4) + 4 * pow(a, 2) * pow(x, 2), 2) - pow(x, 2) - pow(a, 2), 2)
+        function getY(x, a, b) {
+            return root(root(pow(b, 4) + 4 * pow(a, 2) * pow(x, 2), 2) - pow(x, 2) - pow(a, 2), 2)
         }
 
-        function getFunction(a, K) {
+        function getFunction(a, b) {
             return function (x) {
-                return getYfromK(x, a, K)
+                return getY(x, a, b)
             }
         }
 
@@ -114,7 +114,7 @@
                 Ctx = Canvas.getContext('2d');
                 Ctx.clearRect(0, 0, Width, Height);
                 // Draw:
-                DrawAxes();
+                // DrawAxes();
                 RenderFunction(F, 1);
                 RenderFunction(F, -1);
             }
@@ -165,7 +165,7 @@
 
 
         // When rendering, XSTEP determines the horizontal distance between points:
-        var XSTEP = 0.001 // (MaxX() - MinX()) / Width;
+        var XSTEP = 0.03 // (MaxX() - MinX()) / Width;
 
 
         // RenderFunction(f) renders the input funtion f on the canvas.
@@ -175,7 +175,7 @@
             Ctx.beginPath();
             for (var x = MinX(); x <= MaxX(); x += XSTEP) {
                 var y = f(x) * sign;
-                if (first) { // || (y > 0 && y < 2.7) || (y < 0 && y > -2.7)) {
+                if (first || (y > 0 && y < 2.7) || (y < 0 && y > -2.7)) {
                     Ctx.moveTo(XC(x), YC(y));
                     first = false;
                 } else {
@@ -185,19 +185,19 @@
             Ctx.stroke();
         }
 
-        var a = 3
-        var K = 2
-        Draw(a, K)
+        var a = 400
+        var b = 550
+        Draw(a, b)
 
-        var KValue = document.getElementById('displayKvalue')
-        document.getElementById('myKRange').oninput = function () {
-            Draw(a, this.value / 100)
-            K = this.value / 100
-            KValue.innerHTML = "K: " + this.value / 100
+        var bValue = document.getElementById('displayBvalue')
+        document.getElementById('myBRange').oninput = function () {
+            Draw(a, this.value)
+            b = this.value
+            bValue.innerHTML = "B: " + this.value
         }
         var aValue = document.getElementById('displayAvalue')
         document.getElementById('myARange').oninput = function () {
-            Draw(this.value, K)
+            Draw(this.value, b)
             a = this.value
             aValue.innerHTML = "A: " + this.value
         }

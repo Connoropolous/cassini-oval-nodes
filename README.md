@@ -17,3 +17,20 @@ Criteria::
 - if the cassini equation passes the point where a = b, which is where they are about to separate, then 
   the nodes will officially become two nodes
 - ideally, they should separate, and animate the remainder with easing, creating a bounce effect
+
+
+In the equation, there are two variables `a` and `K`
+// the core of the Cassinis Ovals formula
+```javascript
+function getY(x, a, K) {
+    return root(root(pow(a, 4) * pow(K, 4) + 4 * pow(a, 2) * pow(x, 2), 2) - pow(x, 2) - pow(a, 2), 2)
+}
+```
+
+The fixed points are at (+-`a`, 0).
+The needed scale change is effected through the parameter `a`, the scaling factor.
+The parameter `K` takes the role of a shape parameter.
+If `K` > 1, there is a single closed curve.
+If `K` = 1, the oval becomes the lemniscate of Bernoulli.
+If `K` < 1, the curve is two disjoint ovals.
+
