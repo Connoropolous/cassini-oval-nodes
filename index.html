@@ -6,12 +6,10 @@
 </head>
 
 <body>
-    a slider
-    <input type="range" min="0" max="10" value="3" class="slider" id="myARange">
-    K slider
+    K
     <input type="range" min="90" max="200" value="200" class="slider" id="myKRange">
-    <div id ="displayAvalue">A: 3</div>
     <div id ="displayKvalue">K: 2</div>
+    <div id ="displayAvalue">A: 3</div>
     <canvas id="xy-graph" width="700" height="700"></canvas>
 
 
@@ -95,6 +93,10 @@
             return Math.pow(base, power)
         }
 
+        function log(num) {
+            return Math.log(num)
+        }
+
         // the core of the Cassinis Ovals formula
         function getYfromK(x, a, K) {
             return root(root(pow(a, 4) * pow(K, 4) + 4 * pow(a, 2) * pow(x, 2), 2) - pow(x, 2) - pow(a, 2), 2)
@@ -106,15 +108,32 @@
             }
         }
 
+        function getA(K, volume) {
+            // if (K >= 1) {
+                const smth = Math.sqrt(1 + pow(K, 2))
+                const partA = ((pow(K, 2) + 2) * smth) / 3
+                const partB = pow(K, 4) * log((1 + smth) / K)
+                const AB = partA + partB
+                return root(volume / Math.PI / AB, 3)
+            /* } else if (K < 1) {
+                const smthPos = Math.sqrt(1 + pow(K, 2))
+                const smthNeg = Math.sqrt(1 - pow(K, 2))
+                const partA = ((pow(K, 2) - 2) * smthPos + (pow(K, 2) + 2) * smthNeg) / 3
+                const partB = pow(K, 4) * log((1 + smthPos) / (1 + smthNeg))
+                const AB = partA + partB
+                return root(volume / Math.PI / AB, 3)
+            } */
+        }
+
         // Clears the canvas, draws the axes and graphs the function F.
-        function Draw(a, b) {
-            var F = getFunction(a, b);
+        function Draw(a, K) {
+            var F = getFunction(a, K);
             if (Canvas.getContext) {
                 // Set up the canvas:
                 Ctx = Canvas.getContext('2d');
                 Ctx.clearRect(0, 0, Width, Height);
                 // Draw:
-                DrawAxes();
+                // DrawAxes();
                 RenderFunction(F, 1);
                 RenderFunction(F, -1);
             }
@@ -185,21 +204,28 @@
             Ctx.stroke();
         }
 
-        var a = 3
-        var K = 2
-        Draw(a, K)
-
         var KValue = document.getElementById('displayKvalue')
-        document.getElementById('myKRange').oninput = function () {
-            Draw(a, this.value / 100)
-            K = this.value / 100
-            KValue.innerHTML = "K: " + this.value / 100
-        }
         var aValue = document.getElementById('displayAvalue')
-        document.getElementById('myARange').oninput = function () {
-            Draw(this.value, K)
-            a = this.value
-            aValue.innerHTML = "A: " + this.value
+        var a
+        var K
+        var volume = 900
+        setK(2)
+
+        document.getElementById('myKRange').oninput = function () {
+            setK(this.value / 100)
+        }
+
+        function setA(num) {
+            a = num
+            aValue.innerHTML = "A: " + num
+            Draw(a, K)
+        }
+
+        function setK(num) {
+            K = num
+            KValue.innerHTML = "K: " + num
+            let a = getA(K, volume)
+            setA(a)
         }
     </script>
 </body>

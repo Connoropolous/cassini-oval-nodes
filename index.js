@@ -12,12 +12,16 @@ y^2 = sqrt(a^4K^4 + 4a^2x^2) - x^2 - a^2
 y = sqrt(sqrt(a^4K^4 + 4a^2x^2) - x^2 - a^2)
 */
 
-function root(num, degree) {
+function root(degree, num) {
     return Math.pow(num, 1/degree)
 }
 
 function pow(base, power) {
     return Math.pow(base, power)
+}
+
+function log(num) {
+    return Math.log(num)
 }
 
 /*
@@ -39,3 +43,42 @@ function getFunction(a, K) {
 }
 
 // module.exports.getB = getB
+
+
+// When K >= 1, the volume of an oval or revolution 
+// When 0 < K < 1, there are two distinct ovals corresponding to the divided cell. In this case, the volume
+
+function getVolume(a, K) {
+    if (K >= 1) {
+        const smth = Math.sqrt(1 + pow(K, 2))
+
+        const partA = ((pow(K, 2) + 2) * smth) / 3
+
+        const partB = pow(K, 4) * log((1 + smth) / K)
+
+        const AB = partA + partB
+
+        return Math.PI * pow(a, 3) * AB
+    } else if (K < 1) {
+
+    }
+}
+module.exports.getVolume = getVolume
+
+function getA(K, volume) {
+    if (K >= 1) {
+        const smth = Math.sqrt(1 + pow(K, 2))
+        const partA = ((pow(K, 2) + 2) * smth) / 3
+        const partB = pow(K, 4) * log((1 + smth) / K)
+        const AB = partA + partB
+        return root(3, volume / Math.PI / AB)
+    } else if (K < 1) {
+        const smthPos = Math.sqrt(1 + pow(K, 2))
+        const smthNeg = Math.sqrt(1 - pow(K, 2))
+        const partA = ((pow(K, 2) - 2) * smthPos + (pow(K, 2) + 2) * smthNeg) / 3
+        const partB = pow(K, 4) * log((1 + smthPos) / (1 + smthNeg))
+        const AB = partA + partB
+        return root(3, volume / Math.PI / AB)
+    }
+}
+module.exports.getA = getA
