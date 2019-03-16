@@ -8,8 +8,9 @@
 <body>
     K
     <input type="range" min="90" max="200" value="200" class="slider" id="myKRange">
-    <div id ="displayKvalue">K: 2</div>
-    <div id ="displayAvalue">A: 3</div>
+    <div id ="displayKvalue">Shape/K: 2</div>
+    <div id ="displayAvalue">Scale/A: 3</div>
+    <div id ="displayVolume">Volume: 900</div>
     <canvas id="xy-graph" width="700" height="700"></canvas>
 
 
@@ -217,13 +218,13 @@
 
         function setA(num) {
             a = num
-            aValue.innerHTML = "A: " + num
+            aValue.innerHTML = "Scale/A: " + num
             Draw(a, K)
         }
 
         function setK(num) {
             K = num
-            KValue.innerHTML = "K: " + num
+            KValue.innerHTML = "Shape/K: " + num
             let a = getA(K, volume)
             setA(a)
         }
