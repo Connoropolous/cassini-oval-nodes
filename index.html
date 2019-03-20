@@ -111,7 +111,7 @@
 
         function getA(K, volume) {
             if (K > 1) {
-                const smth = Math.sqrt(1 + pow(K, 2))
+                const smth = Math.sqrt(pow(K, 2) - 1)
                 const partA = ((pow(K, 2) + 2) * smth) / 3
                 const partB = pow(K, 4) * log((1 + smth) / K)
                 const AB = partA + partB

@@ -66,19 +66,13 @@ function getVolume(a, K) {
 module.exports.getVolume = getVolume
 
 function getA(K, volume) {
-    if (K >= 1) {
-        const smth = Math.sqrt(1 + pow(K, 2))
-        const partA = ((pow(K, 2) + 2) * smth) / 3
-        const partB = pow(K, 4) * log((1 + smth) / K)
-        const AB = partA + partB
-        return root(3, volume / Math.PI / AB)
-    } else if (K < 1) {
-        const smthPos = Math.sqrt(1 + pow(K, 2))
-        const smthNeg = Math.sqrt(1 - pow(K, 2))
-        const partA = ((pow(K, 2) - 2) * smthPos + (pow(K, 2) + 2) * smthNeg) / 3
-        const partB = pow(K, 4) * log((1 + smthPos) / (1 + smthNeg))
-        const AB = partA + partB
-        return root(3, volume / Math.PI / AB)
-    }
+    const smth = Math.sqrt(1 + pow(K, 2))
+    const partA = ((pow(K, 2) + 2) * smth) / 3
+    const partB = pow(K, 4) * log((1 + smth) / K)
+    const AB = partA + partB
+    return root(3, volume / Math.PI / AB)
 }
 module.exports.getA = getA
+
+console.log(getVolume(1, 2))
+console.log(getA(2, 28.872))
